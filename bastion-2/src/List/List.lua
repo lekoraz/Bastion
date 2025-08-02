@@ -109,17 +109,13 @@ function List:filter(callback)
     return newList
 end
 
----@param callback fun(result: any, value: any): boolean
+---@param callback fun(result: any, value: any): any
 ---@param initialValue any
----@return boolean
+---@return any
 function List:reduce(callback, initialValue)
     local result = initialValue
-    local done = false
     for _, v in ipairs(self._list) do
-        result, done = callback(result, v)
-        if done then
-            break
-        end
+        result = callback(result, v)
     end
     return result
 end
@@ -188,7 +184,7 @@ end
 function List:join(separator)
     local result = ""
     for i, v in ipairs(self._list) do
-        result = result .. v
+        result = result .. tostring(v)
         if i < #self._list then
             result = result .. separator
         end
