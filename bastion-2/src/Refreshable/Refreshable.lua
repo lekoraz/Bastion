@@ -71,4 +71,10 @@ function Refreshable:SetCallback(cb)
     self.callback = cb
 end
 
+-- Get the current value
+---@return any
+function Refreshable:GetValue()
+    return self.value
+end
+
 return Refreshable
