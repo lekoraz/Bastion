@@ -75,4 +75,14 @@ function Command:PrintHelp()
     end
 end
 
+---@param command string
+---@return nil
+function Command:RunCommand(command)
+    local args = self:Parse(command)
+    local runner = self.commands[args[1]]
+    if runner then
+        runner.cb(args)
+    end
+end
+
 return Command
