@@ -113,7 +113,9 @@ function Bastion.Bootstrap()
     Bastion.MythicPlusUtils = Bastion.require("MythicPlusUtils"):New()
     ---@type NotificationsList
     Bastion.Notifications = Bastion.NotificationsList:New()
-
+    ---@type Config
+    Bastion.Config = Bastion.require("Config"):New()
+    
     local LIBRARIES = {}
     local MODULES = {}
 
