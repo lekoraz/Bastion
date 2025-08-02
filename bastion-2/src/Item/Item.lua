@@ -76,7 +76,7 @@ end
 ---@return string
 function Item:GetName()
     if C_Item.GetItemInfo then
-        return C_Item.GetItemInfo(self:GetID())
+        return C_Item.GetItemInfo(self:GetID()).name
     end
     return GetItemInfo(self:GetID())
 end
