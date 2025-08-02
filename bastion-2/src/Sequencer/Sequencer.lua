@@ -78,6 +78,15 @@ function Sequencer:Abort()
     self.index = #self.actions + 1
 end
 
+-- Peek at the next action in the sequence
+---@return function | nil
+function Sequencer:Peek()
+    if self:Finished() then
+        return nil
+    end
+    return self.actions[self.index]
+end
+
 -- tostring
 ---@return string
 function Sequencer:__tostring()
