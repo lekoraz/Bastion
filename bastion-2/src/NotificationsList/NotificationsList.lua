@@ -80,7 +80,7 @@ end
 function Notification:Remove()
     -- Fade out the notification frame and remove it after the fade
     UIFrameFadeOut(self.frame, 0.2, 1, 0)
-    C_Timer.After(0.5, function()
+    C_Timer.NewTimer(0.5, function()
         self.frame:Hide()
         self.frame:ClearAllPoints()
         self.frame:SetParent(nil)
