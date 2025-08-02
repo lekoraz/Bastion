@@ -24,4 +24,11 @@ function ItemBook:GetItem(id)
     return self.items[id]
 end
 
+-- Get a spell from the ItemBook if it's already registered
+---@param id number
+---@return Item | nil
+function ItemBook:GetIfRegistered(id)
+    return self.items[id]
+end
+
 return ItemBook
