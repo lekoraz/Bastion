@@ -572,7 +572,7 @@ end
 ---@param name string
 ---@return boolean
 function Spell:HasCondition(name)
-    local condition = self:GetCondition(name)
+    local condition = self.conditions[name]
     if condition then
         return true
     end
