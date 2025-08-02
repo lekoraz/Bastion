@@ -75,4 +75,10 @@ function Module:Tick()
     end
 end
 
+-- IsEnabled
+---@return boolean
+function Module:IsEnabled()
+    return self.enabled
+end
+
 return Module
