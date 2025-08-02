@@ -10,41 +10,27 @@ function ClassMagic:Resolve(Class, key)
         return Class[key]
     end
 
-    if Class['Get' .. key:sub(1, 1):upper() .. key:sub(2)] then
-        local func = Class['Get' .. key:sub(1, 1):upper() .. key:sub(2)]
-
-        -- Call the function and return the result if there's more than one return value return it as a table
-        local result = { func(self) }
+    local function callGetter(getter)
+        local result = { getter(self) }
         if #result > 1 then
             return result
         end
-
         return result[1]
     end
 
-
-    if Class['Get' .. key:upper()] then
-        local func = Class['Get' .. key:upper()]
-
-        -- Call the function and return the result if there's more than one return value return it as a table
-        local result = { func(self) }
-        if #result > 1 then
-            return result
-        end
-
-        return result[1]
+    local getterName = 'Get' .. key:sub(1, 1):upper() .. key:sub(2)
+    if Class[getterName] then
+        return callGetter(Class[getterName])
     end
 
-    if Class['Is' .. key:upper()] then
-        local func = Class['Is' .. key:upper()]
+    getterName = 'Get' .. key:upper()
+    if Class[getterName] then
+        return callGetter(Class[getterName])
+    end
 
-        -- Call the function and return the result if there's more than one return value return it as a table
-        local result = { func(self) }
-        if #result > 1 then
-            return result
-        end
-
-        return result[1]
+    getterName = 'Is' .. key:upper()
+    if Class[getterName] then
+        return callGetter(Class[getterName])
     end
 
     return Class[key]
