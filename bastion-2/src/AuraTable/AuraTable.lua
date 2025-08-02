@@ -53,9 +53,9 @@ function AuraTable:OnUpdate(auras)
     if updatedAuras and #updatedAuras > 0 then
         for i = 1, #updatedAuras do
             local id = updatedAuras[i]
-            local newAura = C_UnitAuras.GetAuraDataByAuraInstanceID(self.unit:GetOMToken(), id);
-            if newAura then
-                local aura = Bastion.Aura:CreateFromUnitAuraInfo(newAura)
+            local newAuraInfo = C_UnitAuras.GetAuraDataByAuraInstanceID(self.unit:GetOMToken(), id);
+            if newAuraInfo then
+                local aura = Bastion.Aura:CreateFromUnitAuraInfo(newAuraInfo)
                 self:AddOrUpdateAuraInstanceID(aura:GetAuraInstanceID(), aura)
             end
         end
@@ -145,7 +145,7 @@ function AuraTable:GetUnitBuffs()
         return
     end
 
-    AuraUtil_ForEachAura(self.unit:GetOMToken(), 'HELPFUL', nil, function(a)
+    AuraUtil.ForEachAura(self.unit:GetOMToken(), 'HELPFUL', nil, function(a)
         local aura = Bastion.Aura:CreateFromUnitAuraInfo(a)
 
         if aura:IsValid() then
@@ -184,7 +184,7 @@ function AuraTable:GetUnitDebuffs()
         return
     end
 
-    AuraUtil_ForEachAura(self.unit:GetOMToken(), 'HARMFUL', nil, function(a)
+    AuraUtil.ForEachAura(self.unit:GetOMToken(), 'HARMFUL', nil, function(a)
         local aura = Bastion.Aura:CreateFromUnitAuraInfo(a)
 
         if aura:IsValid() then
