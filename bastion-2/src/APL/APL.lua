@@ -83,14 +83,17 @@ end
 function APLActor:Execute()
     -- If the actor is a sequencer we don't want to continue executing the APL if the sequencer is not finished
     if self:GetActor().sequencer then
-        if self:GetActor().condition and self:GetActor().condition() and not self:GetActor().sequencer:Finished() then
-            self:GetActor().sequencer:Execute()
-            return true
+        local finished = self:GetActor().sequencer:Finished()
+        if self:GetActor().condition and self:GetActor().condition() and not finished then
+            if self:GetActor().sequencer:Execute() then
+                return true
+            end
         end
 
-        if not self:GetActor().condition and not self:GetActor().sequencer:Finished() then
-            self:GetActor().sequencer:Execute()
-            return true
+        if not self:GetActor().condition and not finished then
+            if self:GetActor().sequencer:Execute() then
+                return true
+            end
         end
 
         -- Check if the sequencer can be reset and reset it if it can
