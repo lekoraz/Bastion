@@ -3,7 +3,7 @@ local Tinkr = ...
 local Evaulator = Tinkr.Evaluator
 
 ---@class Bastion
-local Bastion = {DebugMode = false}
+local Bastion = {DebugMode = false, missed = {}}
 Bastion.__index = Bastion
 
 function Bastion:Require(file)
@@ -142,7 +142,6 @@ function Bastion.Bootstrap()
     end)
 
     local pguid = UnitGUID("player")
-    local missed = {}
 
     Bastion.Globals.EventManager:RegisterWoWEvent("COMBAT_LOG_EVENT_UNFILTERED",
                                                   function()
@@ -179,8 +178,8 @@ function Bastion.Bootstrap()
                     local castingSpell = u:GetCastingOrChannelingSpell()
 
                     if castingSpell then
-                        if not missed[castingSpell:GetID()] then
-                            missed[castingSpell:GetID()] = true
+                        if not Bastion.missed[castingSpell:GetID()] then
+                            Bastion.missed[castingSpell:GetID()] = true
                         end
                     end
                 end
@@ -255,6 +254,7 @@ function Bastion.Bootstrap()
         local i = 1
         local rand = math.random(100000, 999999)
         local BOOKTYPE_SPELL = BOOKTYPE_SPELL or (Enum.SpellBookSpellBank.Player and Enum.SpellBookSpellBank.Player or 'spell')
+        local fileName = 'bastion-' .. select(2, UnitClass('player')) .. '-' .. rand .. '.lua'
         while true do
             local spellName, spellSubName
 
@@ -277,10 +277,9 @@ function Bastion.Bootstrap()
             end
 
             if spellID then
-                spellName = spellName:gsub("[%W%s]", "")
-                WriteFile('bastion-' .. UnitClass('player') .. '-' .. rand ..
-                              '.lua',
-                          "local " .. spellName ..
+                local cleanSpellName = spellName:gsub("[%W%s]", "")
+                WriteFile(fileName,
+                          "local " .. cleanSpellName ..
                               " = Bastion.Globals.SpellBook:GetSpell(" ..
                               spellID .. ")\n", true)
             end
@@ -327,7 +326,7 @@ function Bastion.Bootstrap()
 
     Command:Register('missed', 'Dump the list of immune kidney shot spells',
                      function()
-        for k, v in pairs(missed) do Bastion:Print(k) end
+        for k, v in pairs(Bastion.missed) do Bastion:Print(k) end
     end)
 
     ---@param library Library
@@ -378,31 +377,8 @@ function Bastion.Bootstrap()
 
         local library = LIBRARIES[name]
 
-        -- if library.dependencies then
-        --     for i = 1, #library.dependencies do
-        --         local dep = library.dependencies[i]
-        --         if LIBRARIES[dep] then
-        --             if LIBRARIES[dep].dependencies then
-        --                 for j = 1, #LIBRARIES[dep].dependencies do
-        --                     if LIBRARIES[dep].dependencies[j] == library.name then
-        --                         Bastion:Print("Circular dependency detected between " .. library.name .. " and " .. dep)
-        --                         return false
-        --                     end
-        --                 end
-        --             end
-        --         else
-        --             Bastion:Print("Library " .. v.name .. " depends on " .. dep .. " but it's not registered")
-        --             return false
-        --         end
-        --     end
-        -- end
-
         return library
     end
-
-    -- if not Bastion:CheckLibraryDependencies() then
-    --     return
-    -- end
 
     Load("@Libraries/")
     Load("@Modules/")
