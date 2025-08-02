@@ -252,6 +252,9 @@ function Unit:GetOMToken()
     if not self.unit then
         return "none"
     end
+    if type(self.unit) == "string" then
+        return self.unit
+    end
     return self.unit:unit()
 end
 
@@ -312,7 +315,8 @@ end
 -- Get the units class id
 ---@return Class
 function Unit:GetClass()
-    local locale, class, classID = UnitClass(self:GetOMToken())
+    local _, _, classID = C_Unit.GetClassInfo(self:GetOMToken())
+    local locale, class = GetClassInfo(classID)
     return Bastion.Class:New(locale, class, classID)
 end
 
