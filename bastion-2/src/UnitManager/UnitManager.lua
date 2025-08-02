@@ -207,22 +207,18 @@ function UnitManager:GetFriendWithMostFriends(radius)
     self:EnumFriends(function(u)
         if u:IsAlive() then
             local c = 0
+            local nearbyFriends = {}
             self:EnumFriends(function(other)
                 if other:IsAlive() and u:GetDistance(other) <= radius then
                     c = c + 1
+                    table.insert(nearbyFriends, other)
                 end
                 return false
             end)
             if c > count then
                 unit = u
                 count = c
-                friends = {}
-                self:EnumFriends(function(other)
-                    if other:IsAlive() and u:GetDistance(other) <= radius then
-                        table.insert(friends, other)
-                    end
-                    return false
-                end)
+                friends = nearbyFriends
             end
         end
         return false
@@ -238,22 +234,18 @@ function UnitManager:GetEnemiesWithMostEnemies(radius)
     self:EnumEnemies(function(u)
         if u:IsAlive() then
             local c = 0
+            local nearbyEnemies = {}
             self:EnumEnemies(function(other)
                 if other:IsAlive() and u:GetDistance(other) <= radius then
                     c = c + 1
+                    table.insert(nearbyEnemies, other)
                 end
                 return false
             end)
             if c > count then
                 unit = u
                 count = c
-                enemies = {}
-                self:EnumEnemies(function(other)
-                    if other:IsAlive() and u:GetDistance(other) <= radius then
-                        table.insert(enemies, other)
-                    end
-                    return false
-                end)
+                enemies = nearbyEnemies
             end
         end
         return false
