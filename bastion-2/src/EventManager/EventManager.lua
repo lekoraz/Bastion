@@ -56,6 +56,21 @@ function EventManager:RegisterWoWEvent(event, handler)
     table.insert(self.wowEventHandlers[event], handler)
 end
 
+-- Unregister a wow event
+---@param event string
+---@param handler fun(...)
+---@return nil
+function EventManager:UnregisterWoWEvent(event, handler)
+    if self.wowEventHandlers[event] then
+        for i, callback in ipairs(self.wowEventHandlers[event]) do
+            if callback == handler then
+                table.remove(self.wowEventHandlers[event], i)
+                break
+            end
+        end
+    end
+end
+
 -- Trigger an event
 ---@param event string
 ---@param ... any
