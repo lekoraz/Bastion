@@ -76,4 +76,10 @@ function Cacheable:SetCallback(cb)
     self.callback = cb
 end
 
+-- Get the current value
+---@return any
+function Cacheable:GetValue()
+    return self.value
+end
+
 return Cacheable
